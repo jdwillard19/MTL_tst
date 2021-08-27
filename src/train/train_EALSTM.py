@@ -76,10 +76,11 @@ targ_ep = 200
 targ_rmse = 1.89
 
 #load metadata
-metadata = pd.read_csv("../../metadata/lake_metadata.csv")
+# metadata = pd.read_csv("../../metadata/lake_metadata.csv")
+metadata = pd.read_feather("../../metadata/lake_metadata.feather")
 
 #trim to observed lakes
-metadata = metadata[metadata['num_obs'] > 0]
+# metadata = metadata[metadata['num_obs'] > 0]
 
 
 first_save_epoch = 0
@@ -94,9 +95,9 @@ ep_arr = []
 
 if not os.path.exists("./ealstm_trn_data.npy"):
     (trn_data, _) = buildCtlstmLakeData(lakenames,\
-                                                    seq_length, n_total_feats,\
-                                                    win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                    static_feats=True,n_static_feats = 4,verbose=True,cold_filter=False) 
+                                        seq_length, n_total_feats,\
+                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                        static_feats=True,n_static_feats = 4,verbose=True,cold_filter=False) 
 
     np.save("./ealstm_trn_data.npy",trn_data)
 else:
