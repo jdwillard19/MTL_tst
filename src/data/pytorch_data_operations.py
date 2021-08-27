@@ -19,7 +19,8 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
                         randomSeed=0):
     #composite data structures
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
-    trn_dates_comp = torch.Tensor(0, seq_length)
+    trn_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
+    
     X_tst_comp = torch.Tensor(0, seq_length, n_features+1)
     tst_dates_comp = torch.Tensor(0, seq_length)
     # X_all_comp = torch.Tensor(0, seq_length, n_features+1)
