@@ -115,89 +115,11 @@ else:
 
 
 print("train_data size: ",trn_data.size())
-
-#add oversampling data
-data = trn_data.numpy()
-
-vals = data[np.isfinite(data[:,:,-1])][:,-1]
-
-mu, std = norm.fit(vals) 
-nsize = vals.shape[0]
-# plt.hist(df['wtemp_actual'].values,bins=bins)
-# Plot the histogram.
-
-hist, bins, _ = plt.hist(vals, bins=40, color='b', edgecolor='black')
-xmin, xmax = plt.xlim()
-
-p = norm.pdf(bins, mu, std)           
-new_handler, = plt.plot(bins, p/p.sum() * nsize , 'r', linewidth=2)
-
-# new_handler now contains a Line2D object
-# and the appropriate way to get data from it is therefore:
-xdata, ydata = new_handler.get_data()
-
-add_40 = (ydata[-1]+ydata[-2])/2 - hist[-2]
-ind40 = np.where((data[:,:,-1]>39)&(data[:,:,-1] <= 40))[0]
-if ind40.shape[0] != 0:
-    new_data = data[np.append(ind40,np.random.choice(ind40,int(np.round(add_40)))),:,:]
-    augment = new_data
-else:
-    augment = np.empty((0,350,10))
-
-add_39 = (ydata[-2]+ydata[-3])/2 - hist[-3]
-ind39 = np.where((data[:,:,-1]>38)&(data[:,:,-1] <= 39))[0]
-new_data = data[np.append(ind39,np.random.choice(ind39,int(np.round(add_39)))),:,:]
-augment = np.concatenate((augment,new_data),axis=0)
-
-add_38 = (ydata[-3]+ydata[-4])/2 - hist[-4]
-ind38 = np.where((data[:,:,-1]>37)&(data[:,:,-1] <= 38))[0]
-new_data = data[np.append(ind38,np.random.choice(ind38,int(np.round(add_38)))),:,:]
-augment = np.concatenate((augment,new_data),axis=0)
-
-add_37 = (ydata[-4] + ydata[-5])/2 - hist[-5]
-ind37 = np.where((data[:,:,-1]>36)&(data[:,:,-1] <= 37))[0]
-new_data = data[np.append(ind37,np.random.choice(ind37,int(np.round(add_37)))),:,:]
-augment = np.concatenate((augment,new_data),axis=0)
-
-add_36 = (ydata[-5]+ydata[-6])/2 - hist[-6]
-ind36 = np.where((data[:,:,-1]>35)&(data[:,:,-1] <= 36))[0]
-new_data = data[np.append(ind36,np.random.choice(ind36,int(np.round(add_36)))),:,:]
-augment = np.concatenate((augment,new_data),axis=0)
-
-add_35 = (ydata[-6]+ydata[-7])/2 - hist[-6]
-ind35 = np.where((data[:,:,-1]>34)&(data[:,:,-1] <= 35))[0]
-new_data = data[np.append(ind35,np.random.choice(ind35,int(np.round(add_35)))),:,:]
-augment = np.concatenate((augment,new_data),axis=0)
-
-add_34 = (ydata[-7]+ydata[-8])/2 - hist[-7]
-ind34 = np.where((data[:,:,-1]>33)&(data[:,:,-1] <= 34))[0]
-new_data = data[np.append(ind34,np.random.choice(ind34,int(np.round(add_34)))),:,:]
-augment = np.concatenate((augment,new_data),axis=0)
-
-add_33 = (ydata[-8]+ydata[-9])/2 - hist[-8]
-ind33 = np.where((data[:,:,-1]>32)&(data[:,:,-1] <= 33))[0]
-new_data = data[np.append(ind33,np.random.choice(ind33,int(np.round(add_33)))),:,:]
-augment = np.concatenate((augment,new_data),axis=0)
-
-pdb.set_trace()
-
-#remove non-hot obs in augment
-ind3 = np.where(augment[:,:,-1] < 32)
-augment[ind3[0],ind3[1],-1] = np.nan
-
-#add noise optional
-augment[:,:,:-1] = augment[:,:,:-1] + (.0125**.5)*np.random.randn(augment.shape[0],augment.shape[1],augment.shape[2]-1)
-augment[:,:,-1] = augment[:,:,-1] + (.125**.5)*np.random.randn(augment.shape[0],augment.shape[1])
-
-data = np.concatenate((data,augment), axis=0)
-np.save("../evaluate/ealstm_trn_data_normoversample.npy",data)
-
-trn_data = torch.from_numpy(data)
-print("train_data size: ",trn_data.size())
-print(len(lakenames), " lakes of data")
+print("val_data size: ",val_data.size())
 
 
-batch_size = int(math.floor(trn_data.size()[0])/150)
+
+batch_size = 5000
 
 
 
@@ -507,7 +429,7 @@ class Model(nn.Module):
 
 
 # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
+lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,hidden_size=n_hidden)
 
 #tell model to use GPU if needed
 if use_gpu:
@@ -628,5 +550,67 @@ for epoch in range(n_eps):
         print("training complete")
         break
 
+
+    with torch.no_grad():
+                      #data loader for test data
+    valloader = torch.utils.data.DataLoader(tst_data, batch_size=5000, shuffle=False, pin_memory=True)
+
+    mse_criterion = nn.MSELoss()
+
+    lstm_net.eval()
+    with torch.no_grad():
+        avg_mse = 0
+        mse_ct = 0
+        for i, data in enumerate(valloader, 0):
+            #this loop is dated, there is now only one item in testloader, however in the future we could reduce batch size if we want
+            mse_ct += 1
+            #parse data into inputs and targets
+            inputs = data[:,:,:n_features].float()
+            targets = data[:,:,-1].float()
+            # targets = targets[:, begin_loss_ind:]
+            # tmp_dates = tst_dates[:, begin_loss_ind:]
+            # depths = inputs[:,:,0]
+
+            if use_gpu:
+                inputs = inputs.cuda()
+                targets = targets.cuda()
+
+            #run model predict
+            h_state = None
+            lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+            pred, h_state = lstm_net(inputs, h_state)
+            pred = pred.view(pred.size()[0],-1)
+            pred = pred[:, begin_loss_ind:]
+
+            #calculate error
+            targets = targets.cpu()
+            loss_indices = np.where(~np.isnan(targets))
+            if use_gpu:
+                targets = targets.cuda()
+            inputs = inputs[:, begin_loss_ind:, :]
+            # depths = depths[:, begin_loss_ind:]
+            mse = mse_criterion(pred[loss_indices], targets[loss_indices])
+            # print("test loss = ",mse)
+            avg_mse += mse
+
+            # #format prediction and labels into depths by days matrices
+            # (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), depths, tmp_dates, n_depths, 
+            #                                                 n_test_dates, u_depths,
+            #                                                 unique_tst_dates) 
+            #store output
+            # label_mats = labelm_npy
+            # loss_output = outputm_npy[~np.isnan(labelm_npy)]
+            # loss_label = labelm_npy[~np.isnan(labelm_npy)]
+
+            # mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+            # print(n_prof," obs ",lakename+" rmse=" + str(mat_rmse))
+            # avg_over_seed[seed_ct] = mat_rmse
+# 
+            # row_vals = [lakename, n_prof, seed, mat_rmse]
+            # row_vals_str = [str(i) for i in row_vals]
+
+            #append
+            # csv_targ.append(",".join(row_vals_str))
+        print("test val mse: ",avg_mse / mse_ct)
 print("training complete")
 
