@@ -552,65 +552,64 @@ for epoch in range(n_eps):
 
 
     with torch.no_grad():
-                      #data loader for test data
-    valloader = torch.utils.data.DataLoader(tst_data, batch_size=5000, shuffle=False, pin_memory=True)
+        valloader = torch.utils.data.DataLoader(tst_data, batch_size=5000, shuffle=False, pin_memory=True)
 
-    mse_criterion = nn.MSELoss()
+        mse_criterion = nn.MSELoss()
 
-    lstm_net.eval()
-    with torch.no_grad():
-        avg_mse = 0
-        mse_ct = 0
-        for i, data in enumerate(valloader, 0):
-            #this loop is dated, there is now only one item in testloader, however in the future we could reduce batch size if we want
-            mse_ct += 1
-            #parse data into inputs and targets
-            inputs = data[:,:,:n_features].float()
-            targets = data[:,:,-1].float()
-            # targets = targets[:, begin_loss_ind:]
-            # tmp_dates = tst_dates[:, begin_loss_ind:]
-            # depths = inputs[:,:,0]
+        lstm_net.eval()
+        with torch.no_grad():
+            avg_mse = 0
+            mse_ct = 0
+            for i, data in enumerate(valloader, 0):
+                #this loop is dated, there is now only one item in testloader, however in the future we could reduce batch size if we want
+                mse_ct += 1
+                #parse data into inputs and targets
+                inputs = data[:,:,:n_features].float()
+                targets = data[:,:,-1].float()
+                # targets = targets[:, begin_loss_ind:]
+                # tmp_dates = tst_dates[:, begin_loss_ind:]
+                # depths = inputs[:,:,0]
 
-            if use_gpu:
-                inputs = inputs.cuda()
-                targets = targets.cuda()
+                if use_gpu:
+                    inputs = inputs.cuda()
+                    targets = targets.cuda()
 
-            #run model predict
-            h_state = None
-            lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
-            pred, h_state = lstm_net(inputs, h_state)
-            pred = pred.view(pred.size()[0],-1)
-            pred = pred[:, begin_loss_ind:]
+                #run model predict
+                h_state = None
+                lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+                pred, h_state = lstm_net(inputs, h_state)
+                pred = pred.view(pred.size()[0],-1)
+                pred = pred[:, begin_loss_ind:]
 
-            #calculate error
-            targets = targets.cpu()
-            loss_indices = np.where(~np.isnan(targets))
-            if use_gpu:
-                targets = targets.cuda()
-            inputs = inputs[:, begin_loss_ind:, :]
-            # depths = depths[:, begin_loss_ind:]
-            mse = mse_criterion(pred[loss_indices], targets[loss_indices])
-            # print("test loss = ",mse)
-            avg_mse += mse
+                #calculate error
+                targets = targets.cpu()
+                loss_indices = np.where(~np.isnan(targets))
+                if use_gpu:
+                    targets = targets.cuda()
+                inputs = inputs[:, begin_loss_ind:, :]
+                # depths = depths[:, begin_loss_ind:]
+                mse = mse_criterion(pred[loss_indices], targets[loss_indices])
+                # print("test loss = ",mse)
+                avg_mse += mse
 
-            # #format prediction and labels into depths by days matrices
-            # (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), depths, tmp_dates, n_depths, 
-            #                                                 n_test_dates, u_depths,
-            #                                                 unique_tst_dates) 
-            #store output
-            # label_mats = labelm_npy
-            # loss_output = outputm_npy[~np.isnan(labelm_npy)]
-            # loss_label = labelm_npy[~np.isnan(labelm_npy)]
+                # #format prediction and labels into depths by days matrices
+                # (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), depths, tmp_dates, n_depths, 
+                #                                                 n_test_dates, u_depths,
+                #                                                 unique_tst_dates) 
+                #store output
+                # label_mats = labelm_npy
+                # loss_output = outputm_npy[~np.isnan(labelm_npy)]
+                # loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
-            # mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
-            # print(n_prof," obs ",lakename+" rmse=" + str(mat_rmse))
-            # avg_over_seed[seed_ct] = mat_rmse
-# 
-            # row_vals = [lakename, n_prof, seed, mat_rmse]
-            # row_vals_str = [str(i) for i in row_vals]
+                # mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+                # print(n_prof," obs ",lakename+" rmse=" + str(mat_rmse))
+                # avg_over_seed[seed_ct] = mat_rmse
+    # 
+                # row_vals = [lakename, n_prof, seed, mat_rmse]
+                # row_vals_str = [str(i) for i in row_vals]
 
-            #append
-            # csv_targ.append(",".join(row_vals_str))
-        print("test val mse: ",avg_mse / mse_ct)
+                #append
+                # csv_targ.append(",".join(row_vals_str))
+            print("test val mse: ",avg_mse / mse_ct)
 print("training complete")
 
