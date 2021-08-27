@@ -42,7 +42,7 @@ n_features = 7
 n_lakes = ids.shape[0]
 
 #accumulation data structs for averaging
-feat_per_lake = np.zeros((n_lakes,8), dtype=np.float_)
+feat_per_lake = np.zeros((n_lakes,7), dtype=np.float_)
 feat_per_lake[:] = np.nan
 
 #calculate averages and std_dev for each input driver across all lakes
@@ -52,12 +52,12 @@ for lake_ind, name in enumerate(ids):
     print("(",lake_ind,"/",str(len(ids)),") ","pre ", name)
     feat_per_lake[lake_ind,0] = metadata.loc[name].max_depth
     feat_per_lake[lake_ind,1] = np.log(metadata.loc[name].surface_area)
-    feat_per_lake[lake_ind,2] = metadata_s[metadata_s['site_id']==nid].elevation_m.values[0]
-    feat_per_lake[lake_ind,3] = metadata.loc[name].latitude
-    feat_per_lake[lake_ind,4] = metadata.loc[name].longitude
-    feat_per_lake[lake_ind,5] = metadata.loc[name].glm_strat_perc
-    feat_per_lake[lake_ind,6] = metadata.loc[name].K_d
-    feat_per_lake[lake_ind,7] = metadata.loc[name].SDF
+    # feat_per_lake[lake_ind,2] = metadata_s[metadata_s['site_id']==nid].elevation_m.values[0]
+    feat_per_lake[lake_ind,2] = metadata.loc[name].latitude
+    feat_per_lake[lake_ind,3] = metadata.loc[name].longitude
+    feat_per_lake[lake_ind,4] = metadata.loc[name].glm_strat_perc
+    feat_per_lake[lake_ind,5] = metadata.loc[name].K_d
+    feat_per_lake[lake_ind,6] = metadata.loc[name].SDF
 
 
 pdb.set_trace()    
