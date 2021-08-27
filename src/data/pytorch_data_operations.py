@@ -42,7 +42,7 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
         my_path = os.path.abspath(os.path.dirname(__file__))
 
         feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features.npy"))
-        feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features.npy"))
+        feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea.npy"))
 
         # tst = []
         # trn = []
