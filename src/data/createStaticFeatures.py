@@ -69,6 +69,7 @@ norm_feats = (feat_per_lake - mean_per_feat ) / std_per_feat
 for lake_ind, name in enumerate(ids):
     norm_feat_path = "../../data/processed/"+name+"/processed_features.npy"
     feats = np.load(norm_feat_path)
+    app_arr = np.empty((feats.shape[0],feats.shape[1],7))
     
     #append feats
     pdb.set_trace()
