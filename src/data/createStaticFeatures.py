@@ -67,12 +67,18 @@ norm_feats = (feat_per_lake - mean_per_feat ) / std_per_feat
 
 #add norm feats to existing feats
 for lake_ind, name in enumerate(ids):
+    print("(",lake_ind,"/",str(len(ids)),") "," main ", name)
+
     norm_feat_path = "../../data/processed/"+name+"/processed_features.npy"
     feats = np.load(norm_feat_path)
     app_arr = np.empty((feats.shape[0],feats.shape[1],7))
-    
+    app_arr[:] = norm_feats[lake_ind]
+    new_feats = np.concatenate((app_arr,feats),axis=2)
+
+    new_feat_path = "../../data/processed/"+name+"/processed_features_ea"
+    np.save(new_feat_path, new_feats)
+
     #append feats
-    pdb.set_trace()
 # mean_feats = np.average(means_per_lake, axis=0)   
 # std_feats = np.average(var_per_lake ** (.5), axis=0)   
 # print("mean feats: ", repr(mean_feats))
