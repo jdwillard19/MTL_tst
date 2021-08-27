@@ -57,8 +57,8 @@ lakenames = [re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['t
 ###########################33
 seq_length = 350 #how long of sequences to use in model
 begin_loss_ind = 0#index in sequence where we begin to calculate error or predict
-n_features = 5  #number of physical drivers
-n_static_feats = 4
+n_features = 15  #number of physical drivers
+n_static_feats = 7
 n_total_feats =n_static_feats+n_features
 win_shift = 175 #how much to slide the window on training set each time
 save = True 
