@@ -15,9 +15,8 @@ from scipy import interpolate
 def buildCtlstmLakeData(lakenames, seq_length, n_features,\
                         win_shift=1, begin_loss_ind=100,\
                         test_seq_per_depth=1, sparseCustom=None,
-                        allTestSeq=False,verbose=False,cold_filter=False,\
-                        oldFeat = False, normGE10=False, postProcessSplits=True, \
-                        randomSeed=0,static_feats=False,n_static_feats = 0):
+                        allTestSeq=False,verbose=False,postProcessSplits=True, \
+                        randomSeed=0):
     #composite data structures
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
     trn_dates_comp = torch.Tensor(0, seq_length)
