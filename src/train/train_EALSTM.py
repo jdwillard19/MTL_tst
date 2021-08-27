@@ -94,7 +94,7 @@ ep_arr = []
 
 
 if not os.path.exists("./ealstm_trn_data.npy"):
-    (trn_data, _) = buildCtlstmLakeData(lakenames,\
+    (trn_data, _) = buildCtlstmLakeData(lakenames[:120],\
                                         seq_length, n_features,\
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                         verbose=True) 
@@ -103,7 +103,17 @@ if not os.path.exists("./ealstm_trn_data.npy"):
 else:
     trn_data = torch.from_numpy(np.load("./ealstm_trn_data.npy"))
 
-pdb.set_trace()
+if not os.path.exists("./ealstm_val_data.npy"):
+    (val_data, _) = buildCtlstmLakeData(lakenames[120:],\
+                                        seq_length, n_features,\
+                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                        verbose=True) 
+
+    np.save("./ealstm_val_data.npy",val_data)
+else:
+    val_data = torch.from_numpy(np.load("./ealstm_val_data.npy"))
+
+
 print("train_data size: ",trn_data.size())
 
 #add oversampling data
