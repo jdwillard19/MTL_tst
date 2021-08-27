@@ -95,7 +95,7 @@ ep_arr = []
 
 if not os.path.exists("./ealstm_trn_data.npy"):
     (trn_data, _) = buildCtlstmLakeData(lakenames,\
-                                        seq_length, n_total_feats,\
+                                        seq_length, n_features,\
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                         verbose=True) 
 
