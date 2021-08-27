@@ -220,7 +220,6 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
         trn_dates = trn_dates_tmp
         #gather unique test dates
 
-        unique_dates = dates[tst_date_lower_bound:tst_date_upper_bound]
 
         # hyps_dir = data_dir + "geometry" #hypsography file
         # hyps = []
