@@ -59,9 +59,19 @@ for lake_ind, name in enumerate(ids):
     feat_per_lake[lake_ind,5] = metadata.loc[name].K_d
     feat_per_lake[lake_ind,6] = metadata.loc[name].SDF
 
+mean_per_feat = feat_per_lake.mean(axis=0)
+std_per_feat = feat_per_lake.std(axis=0)
+norm_feats = (feat_per_lake - mean_per_feat ) / std_per_feat
 
-pdb.set_trace()    
 
+
+#add norm feats to existing feats
+for lake_ind, name in enumerate(ids):
+    norm_feat_path = "../../data/processed/"+name+"/processed_features.npy"
+    feats = np.load(norm_feat_path)
+    
+    #append feats
+    pdb.set_trace()
 # mean_feats = np.average(means_per_lake, axis=0)   
 # std_feats = np.average(var_per_lake ** (.5), axis=0)   
 # print("mean feats: ", repr(mean_feats))
