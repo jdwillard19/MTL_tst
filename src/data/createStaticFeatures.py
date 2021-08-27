@@ -32,6 +32,8 @@ import datetime
 base_path = "../../data/raw/sb_mtl_data_release/"
 obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
 metadata = pd.read_feather("../../metadata/lake_metadata.feather")
+metadata_s = pd.read_csv("../../../lake_conus_surface_temp_2021/metadata/lake_metadata.csv")
+metadata.set_index('site_id',inplace=True)
 ids = np.unique(obs_df['site_id'].values)
 ids = np.array([re.search('nhdhr_(.*)', x).group(1) for x in ids])
 
@@ -48,8 +50,17 @@ for lake_ind, name in enumerate(ids):
     nid = 'nhdhr_' + name
 
     print("(",lake_ind,"/",str(len(ids)),") ","pre ", name)
-    pdb.set_trace()
-    
+    feat_per_lake[lake_ind,0] = metadata.loc[name].max_depth
+    feat_per_lake[lake_ind,1] = np.log(metadata.loc[name].surface_area)
+    feat_per_lake[lake_ind,2] = metadata_s[metadata_s['site_id']==nid].elevation_m.values[0]
+    feat_per_lake[lake_ind,3] = metadata.loc[name].latitude
+    feat_per_lake[lake_ind,4] = metadata.loc[name].longitude
+    feat_per_lake[lake_ind,5] = metadata.loc[name].glm_strat_perc
+    feat_per_lake[lake_ind,6] = metadata.loc[name].K_d
+    feat_per_lake[lake_ind,7] = metadata.loc[name].SDF
+
+
+pdb.set_trace()    
 
 # mean_feats = np.average(means_per_lake, axis=0)   
 # std_feats = np.average(var_per_lake ** (.5), axis=0)   
