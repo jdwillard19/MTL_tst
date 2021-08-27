@@ -97,7 +97,7 @@ if not os.path.exists("./ealstm_trn_data.npy"):
     (trn_data, _) = buildCtlstmLakeData(lakenames,\
                                         seq_length, n_total_feats,\
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                        static_feats=True,n_static_feats = 4,verbose=True,cold_filter=False) 
+                                        verbose=True) 
 
     np.save("./ealstm_trn_data.npy",trn_data)
 else:
