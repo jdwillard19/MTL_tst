@@ -552,7 +552,7 @@ for epoch in range(n_eps):
 
 
     with torch.no_grad():
-        valloader = torch.utils.data.DataLoader(tst_data, batch_size=5000, shuffle=False, pin_memory=True)
+        valloader = torch.utils.data.DataLoader(tst_data, batch_size=4150, shuffle=False, pin_memory=True)
 
         mse_criterion = nn.MSELoss()
 
