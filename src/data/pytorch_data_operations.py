@@ -229,7 +229,7 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
 
         #     hyps = getHypsographyManyLakes(hyps_dir, lakename, depth_values)
         X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-        trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
+        trn_dates_comp = np.vstack([trn_dates_comp,trn_dates])
         # X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
     #     # tst_dates_comp = torch.cat([tst_dates_comp,torch.from_numpy(tst_dates)],dim=0)
     # print(repr(lakes_early_obs))
