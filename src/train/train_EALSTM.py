@@ -582,7 +582,7 @@ for epoch in range(n_eps):
 
                 #calculate error
                 targets = targets.cpu()
-                loss_indices = np.where(~np.isnan(targets))
+                loss_indices = np.array(np.isfinite(loss_targets.cpu()), dtype='bool_')
                 if use_gpu:
                     targets = targets.cuda()
                 inputs = inputs[:, begin_loss_ind:, :]
