@@ -561,8 +561,6 @@ for epoch in range(n_eps):
             avg_mse = 0
             mse_ct = 0
             for i, data in enumerate(valloader, 0):
-                #this loop is dated, there is now only one item in testloader, however in the future we could reduce batch size if we want
-                mse_ct += 1
                 #parse data into inputs and targets
                 inputs = data[:,:,:n_features].float()
                 targets = data[:,:,-1].float()
@@ -591,6 +589,8 @@ for epoch in range(n_eps):
                 # depths = depths[:, begin_loss_ind:]
                 mse = mse_criterion(pred[loss_indices], targets[loss_indices])
                 # print("test loss = ",mse)
+                pdb.set_trace()
+                mse_ct += 1
                 avg_mse += mse
 
                 # #format prediction and labels into depths by days matrices
