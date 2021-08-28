@@ -552,10 +552,9 @@ for epoch in range(n_eps):
 
 
     with torch.no_grad():
+        pdb.set_trace()
         valloader = torch.utils.data.DataLoader(val_data, batch_size=4150, shuffle=False, pin_memory=True)
-
         mse_criterion = nn.MSELoss()
-
         lstm_net.eval()
         with torch.no_grad():
             avg_mse = 0
