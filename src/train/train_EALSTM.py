@@ -590,7 +590,6 @@ for epoch in range(n_eps):
                 # depths = depths[:, begin_loss_ind:]
                 mse = mse_criterion(pred[loss_indices], targets[loss_indices])
                 # print("test loss = ",mse)
-                pdb.set_trace()
                 mse_ct += 1
                 avg_mse += mse
 
