@@ -74,6 +74,7 @@ n_eps = 1000
 first_save_epoch = 0
 targ_ep = 200
 targ_rmse = 1.89
+patience = 100
 
 #load metadata
 # metadata = pd.read_csv("../../metadata/lake_metadata.csv")
@@ -540,15 +541,15 @@ for epoch in range(n_eps):
     if verbose:
         print("train rmse loss=", avg_loss)
 
-    if avg_loss < min_train_rmse:
-        min_train_rmse = avg_loss
-        print("model saved")
-        save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final"
-        saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+    # if avg_loss < min_train_rmse:
+    #     min_train_rmse = avg_loss
+    #     print("model saved")
+    #     save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final"
+    #     saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
-    if avg_loss < targ_rmse and epoch > targ_ep:
-        print("training complete")
-        break
+    # if avg_loss < targ_rmse and epoch > targ_ep:
+    #     print("training complete")
+    #     break
 
 
     with torch.no_grad():
@@ -611,6 +612,23 @@ for epoch in range(n_eps):
 
                 #append
                 # csv_targ.append(",".join(row_vals_str))
-            print("test val mse: ",avg_mse / mse_ct)
+            avg_mse = avg_mse / mse_ct
+            print("test val mse: ",avg_mse)
+            if avg_mse < min_train_rmse:
+                min_train_rmse = avg_mse
+                print("model saved")
+                save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final"
+                saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+                ep_since_min = 0
+                min_mse_tsterr = avg_mse
+                ep_min_mse = epoch
+            else:
+                ep_since_min += 1
+            print("lowest epoch was ",ep_min_mse," w/ mse=",min_mse_tsterr)
+            if ep_since_min == patience:
+                print("training complete")
+                sys.exit()
+
+
 print("training complete")
 
