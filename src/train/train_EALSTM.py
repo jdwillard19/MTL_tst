@@ -119,7 +119,7 @@ print("val_data size: ",val_data.size())
 
 
 
-batch_size = 4000
+batch_size = 4150
 
 
 
@@ -552,7 +552,8 @@ for epoch in range(n_eps):
 
 
     with torch.no_grad():
-        valloader = torch.utils.data.DataLoader(val_data, batch_size=4150, shuffle=False, pin_memory=True)
+        tst_batch_size = 4150
+        valloader = torch.utils.data.DataLoader(val_data, batch_size=tst_batch_size, shuffle=False, pin_memory=True)
 
         mse_criterion = nn.MSELoss()
 
