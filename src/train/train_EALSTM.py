@@ -93,7 +93,8 @@ final_output_df = pd.DataFrame()
 
 ep_arr = []   
 
-
+tst_inds = [1,10,20,30,40,50,60,70,80,90,100,110,120,130,140,5,15,35,55,75,85,95,105,115]
+pdb.set_trace()
 if not os.path.exists("./ealstm_trn_data.npy"):
     (trn_data, _) = buildCtlstmLakeData(lakenames[:120],\
                                         seq_length, n_features,\
@@ -105,7 +106,7 @@ else:
     trn_data = torch.from_numpy(np.load("./ealstm_trn_data.npy"))
 
 if not os.path.exists("./ealstm_val_data.npy"):
-    (val_data, _) = buildCtlstmLakeData(lakenames[120:],\
+    (val_data, _) = buildCtlstmLakeData(lakenames[tst_inds],\
                                         seq_length, n_features,\
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                         verbose=True) 
