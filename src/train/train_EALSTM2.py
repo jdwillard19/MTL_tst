@@ -65,7 +65,7 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
-n_hidden = 32
+n_hidden = 128
 lambda1 = 0.000
 
 
@@ -93,26 +93,29 @@ final_output_df = pd.DataFrame()
 
 ep_arr = []   
 
-
-if not os.path.exists("./ealstm_trn_data.npy"):
-    (trn_data, _) = buildCtlstmLakeData(lakenames[:120],\
+tst_inds = [1,10,20,30,40,50,60,70,80,90,100,110,120,130,140,5,15,35,55,75,85,95,105,115]
+tst_inds = [tst_inds[i]+1 for i in tst_inds]
+trn_lakes = np.array([lakenames[i] for i in tst_inds])
+tst_lakes = np.delete(lakenames,tst_inds)
+if not os.path.exists("./ealstm_trn_data2.npy"):
+    (trn_data, _) = buildCtlstmLakeData(trn_lakes,\
                                         seq_length, n_features,\
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                         verbose=True) 
 
-    np.save("./ealstm_trn_data.npy",trn_data)
+    np.save("./ealstm_trn_data2.npy",trn_data)
 else:
-    trn_data = torch.from_numpy(np.load("./ealstm_trn_data.npy"))
+    trn_data = torch.from_numpy(np.load("./ealstm_trn_data2.npy"))
 
-if not os.path.exists("./ealstm_val_data.npy"):
-    (val_data, _) = buildCtlstmLakeData(lakenames[120:],\
+if not os.path.exists("./ealstm_val_data2.npy"):
+    (val_data, _) = buildCtlstmLakeData(tst_lakes,\
                                         seq_length, n_features,\
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                         verbose=True) 
 
-    np.save("./ealstm_val_data.npy",val_data)
+    np.save("./ealstm_val_data2.npy",val_data)
 else:
-    val_data = torch.from_numpy(np.load("./ealstm_val_data.npy"))
+    val_data = torch.from_numpy(np.load("./ealstm_val_data2.npy"))
 
 
 print("train_data size: ",trn_data.size())
