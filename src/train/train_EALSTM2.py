@@ -94,7 +94,7 @@ final_output_df = pd.DataFrame()
 ep_arr = []   
 
 tst_inds = [1,10,20,30,40,50,60,70,80,90,100,110,120,130,140,5,15,35,55,75,85,95,105,115]
-tst_inds = [tst_inds[i]+1 for i in tst_inds]
+tst_inds = [i+1 for i in tst_inds]
 trn_lakes = np.array([lakenames[i] for i in tst_inds])
 tst_lakes = np.delete(lakenames,tst_inds)
 if not os.path.exists("./ealstm_trn_data2.npy"):
