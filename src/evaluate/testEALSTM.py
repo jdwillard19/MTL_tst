@@ -435,7 +435,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     batch_size = tst_data.size()[0]
     # n_test_dates_target = unique_tst_dates_target.shape[0]
 
-    testloader = torch.utils.data.DataLoader(tst_data_target, batch_size=tst_data_target.size()[0], shuffle=False, pin_memory=True)
+    testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
 
     with torch.no_grad():
         avg_mse = 0
