@@ -66,7 +66,7 @@ grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
 n_hidden = 256
-lambda1 = 1e-4
+lambda1 = 1e-5
 
 
 #epoch settings
@@ -75,7 +75,8 @@ first_save_epoch = 0
 targ_ep = 200
 targ_rmse = 1.89
 patience = 100
-
+batch_size = 3800
+tst_batch_size = 3800
 #load metadata
 # metadata = pd.read_csv("../../metadata/lake_metadata.csv")
 metadata = pd.read_feather("../../metadata/lake_metadata.feather")
@@ -123,7 +124,6 @@ print("val_data size: ",val_data.size())
 
 
 
-batch_size = 1600
 
 
 
@@ -556,7 +556,6 @@ for epoch in range(n_eps):
 
 
     with torch.no_grad():
-        tst_batch_size = 4150
         valloader = torch.utils.data.DataLoader(val_data, batch_size=tst_batch_size, shuffle=False, pin_memory=True)
 
         mse_criterion = nn.MSELoss()
