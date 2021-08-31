@@ -436,6 +436,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     # n_test_dates_target = unique_tst_dates_target.shape[0]
 
     testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
+    mse_criterion = nn.MSELoss()
 
     with torch.no_grad():
         avg_mse = 0
@@ -458,7 +459,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             h_state = None
             # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
             # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
-            pdb.set_trace()
             pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
             pred = pred.view(pred.size()[0],-1)
             pred = pred[:, begin_loss_ind:]
