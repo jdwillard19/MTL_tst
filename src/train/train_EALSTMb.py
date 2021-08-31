@@ -75,8 +75,8 @@ first_save_epoch = 0
 targ_ep = 200
 targ_rmse = 1.89
 patience = 100
-batch_size = 3800
-tst_batch_size = 3800
+batch_size = 3600
+tst_batch_size = 3600
 #load metadata
 # metadata = pd.read_csv("../../metadata/lake_metadata.csv")
 metadata = pd.read_feather("../../metadata/lake_metadata.feather")
