@@ -20,7 +20,7 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
     #composite data structures
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
     trn_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
-    
+
     X_tst_comp = torch.Tensor(0, seq_length, n_features+1)
     tst_dates_comp = torch.Tensor(0, seq_length)
     # X_all_comp = torch.Tensor(0, seq_length, n_features+1)
@@ -236,6 +236,10 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
     # print(repr(lakes_early_obs))
     # print(len(lakes_early_obs))
     return (X_trn_comp, trn_dates_comp)
+
+def formatResultsObsDayOnly(pred, targets, tst_dates):
+    pdb.set_trace()
+    return 0
 
 def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
