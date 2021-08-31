@@ -113,9 +113,9 @@ if not os.path.exists("./ealstm_val_data3.npy"):
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                         verbose=True) 
 
-    np.save("./ealstm_val_data2.npy",val_data)
+    np.save("./ealstm_val_data3.npy",val_data)
 else:
-    val_data = torch.from_numpy(np.load("./ealstm_val_data2.npy"))
+    val_data = torch.from_numpy(np.load("./ealstm_val_data3.npy"))
 
 
 print("train_data size: ",trn_data.size())
