@@ -445,7 +445,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             #this loop is dated, there is now only one item in testloader
 
             #parse data into inputs and targets
-            inputs = data[:,:,:n_total_feats].float()
+            inputs = data[:,:,:-1].float()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates[:, begin_loss_ind:]
