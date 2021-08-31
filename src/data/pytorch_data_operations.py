@@ -237,7 +237,7 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
     # print(len(lakes_early_obs))
     return (X_trn_comp, trn_dates_comp)
 
-def formatResultsObsDayOnly(pred, targets, tst_dates):
+def formatResultsObsDayOnly(pred, targets, tst_dates,depths):
     pdb.set_trace()
     return 0
 
