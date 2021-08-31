@@ -510,7 +510,7 @@ for epoch in range(n_eps):
 
 
     if verbose:
-        print("train rmse loss=", avg_loss)
+        print("train rmse loss=", avg_loss/batches_done)
 
     # if avg_loss < min_train_rmse:
     #     min_train_rmse = avg_loss
