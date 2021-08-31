@@ -95,14 +95,14 @@ ep_arr = []
 
 tst_inds = [1,10,20,30,40,50,60,70,80,90,100,110,120,130,140,5,15,35,55,75,85,95,105,115]
 tst_lakes = np.array([lakenames[i] for i in tst_inds])
-trn_lakes = lakenames
-if not os.path.exists("./ealstm_trn_data_145.npy"):
+trn_lakes = np.delete(lakenames,tst_inds)
+if not os.path.exists("./ealstm_trn_data.npy"):
     (trn_data, _) = buildCtlstmLakeData(trn_lakes,\
                                         seq_length, n_features,\
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                         verbose=True) 
 
-    np.save("./ealstm_trn_data_145.npy",trn_data)
+    np.save("./ealstm_trn_data.npy",trn_data)
 else:
     trn_data = torch.from_numpy(np.load("./ealstm_trn_data.npy"))
 
