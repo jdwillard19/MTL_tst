@@ -450,6 +450,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates[:, begin_loss_ind:]
+            depths = inputs[:,:,n_static_feats]
 
             if use_gpu:
                 inputs = inputs.cuda()
@@ -477,6 +478,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             #     ct += 1
         avg_mse = avg_mse / ct
         print("MSE: ",avg_mse)
-        df = formatResultsObsDayOnly(pred.cpu().numpy(), targets.cpu().numpy(), tst_dates) 
+        df = formatResultsObsDayOnly(pred.cpu().numpy(), targets.cpu().numpy(), tst_dates,depths) 
 
         
