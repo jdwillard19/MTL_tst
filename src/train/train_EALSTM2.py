@@ -66,7 +66,7 @@ grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
 n_hidden = 256
-lambda1 = 1e-5
+lambda1 = 1e-4
 
 
 #epoch settings
