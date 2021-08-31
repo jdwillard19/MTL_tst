@@ -95,15 +95,8 @@ final_output_df = pd.DataFrame()
 
 
 
-#format training data for loading
-train_data = TemperatureTrainDataset(trn_data)
 
 
-#format total y-hat data for loading
-n_batches = math.floor(trn_data.size()[0] / batch_size)
-
-#batch samplers used to draw samples in dataloaders
-batch_sampler = pytorch_data_operations.ContiguousBatchSampler(batch_size, n_batches)
 
 
 #define EA-LSTM class
