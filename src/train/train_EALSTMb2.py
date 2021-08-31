@@ -123,7 +123,7 @@ print("val_data size: ",val_data.size())
 
 
 
-batch_size = 3200
+batch_size = 2600
 
 
 
