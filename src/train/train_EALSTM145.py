@@ -70,11 +70,7 @@ lambda1 = 0
 
 
 #epoch settings
-n_eps = 1000
-first_save_epoch = 0
-targ_ep = 200
-targ_rmse = 1.89
-patience = 100
+n_eps = 70
 
 #load metadata
 # metadata = pd.read_csv("../../metadata/lake_metadata.csv")
@@ -91,34 +87,21 @@ yhat_batch_size = 1 #obsolete since this isnt PGDL
 
 final_output_df = pd.DataFrame()
 
-ep_arr = []   
 
-tst_inds = [1,10,20,30,40,50,60,70,80,90,100,110,120,130,140,5,15,35,55,75,85,95,105,115]
-tst_lakes = np.array([lakenames[i] for i in tst_inds])
 trn_lakes = lakenames
-if not os.path.exists("./ealstm_trn_data_145.npy"):
+if not os.path.exists("./ealstm_trn_data145.npy"):
     (trn_data, _) = buildCtlstmLakeData(trn_lakes,\
                                         seq_length, n_features,\
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                         verbose=True) 
 
-    np.save("./ealstm_trn_data_145.npy",trn_data)
+    np.save("./ealstm_trn_data145.npy",trn_data)
 else:
-    trn_data = torch.from_numpy(np.load("./ealstm_trn_data.npy"))
+    trn_data = torch.from_numpy(np.load("./ealstm_trn_data145.npy"))
 
-if not os.path.exists("./ealstm_val_data.npy"):
-    (val_data, _) = buildCtlstmLakeData(tst_lakes,\
-                                        seq_length, n_features,\
-                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                        verbose=True) 
-
-    np.save("./ealstm_val_data.npy",val_data)
-else:
-    val_data = torch.from_numpy(np.load("./ealstm_val_data.npy"))
 
 
 print("train_data size: ",trn_data.size())
-print("val_data size: ",val_data.size())
 
 
 
@@ -447,20 +430,10 @@ optimizer = optim.Adam(lstm_net.parameters(), lr=.005)#, weight_decay=0.01)
 
 #training loop
 
-min_mse = 99999
-min_mse_tsterr = None
-ep_min_mse = -1
-ep_since_min = 0
-best_pred_mat = np.empty(())
 manualSeed = [random.randint(1, 99999999) for i in range(n_eps)]
 
 #stop training if true
-min_train_rmse = 999
-min_train_ep = -1
-done = False
 for epoch in range(n_eps):
-    if done:
-        break
     # if verbose and epoch % 10 == 0:
     if verbose:
         print("train epoch: ", epoch)
@@ -535,10 +508,6 @@ for epoch in range(n_eps):
         avg_loss += loss
         batches_done += 1
 
-    #check for convergence
-    avg_loss = avg_loss / batches_done
-    train_avg_loss = avg_loss
-
 
     if verbose:
         print("train rmse loss=", avg_loss)
@@ -553,83 +522,6 @@ for epoch in range(n_eps):
     #     print("training complete")
     #     break
 
-
-    with torch.no_grad():
-        tst_batch_size = 4150
-        valloader = torch.utils.data.DataLoader(val_data, batch_size=tst_batch_size, shuffle=False, pin_memory=True)
-
-        mse_criterion = nn.MSELoss()
-
-        lstm_net.eval()
-        with torch.no_grad():
-            avg_mse = 0
-            mse_ct = 0
-            for i, data in enumerate(valloader, 0):
-                #parse data into inputs and targets
-                inputs = data[:,:,:n_features].float()
-                targets = data[:,:,-1].float()
-                # targets = targets[:, begin_loss_ind:]
-                # tmp_dates = tst_dates[:, begin_loss_ind:]
-                # depths = inputs[:,:,0]
-
-                if use_gpu:
-                    inputs = inputs.cuda()
-                    targets = targets.cuda()
-
-                #run model predict
-                h_state = None
-                # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
-                pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
-
-                pred = pred.view(pred.size()[0],-1)
-                pred = pred[:, begin_loss_ind:]
-
-                #calculate error
-                targets = targets.cpu()
-                loss_indices = np.array(np.isfinite(targets.cpu()), dtype='bool_')
-                if use_gpu:
-                    targets = targets.cuda()
-                inputs = inputs[:, begin_loss_ind:, :]
-                # depths = depths[:, begin_loss_ind:]
-                mse = mse_criterion(pred[loss_indices], targets[loss_indices])
-                # print("test loss = ",mse)
-                mse_ct += 1
-                avg_mse += mse
-
-                # #format prediction and labels into depths by days matrices
-                # (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), depths, tmp_dates, n_depths, 
-                #                                                 n_test_dates, u_depths,
-                #                                                 unique_tst_dates) 
-                #store output
-                # label_mats = labelm_npy
-                # loss_output = outputm_npy[~np.isnan(labelm_npy)]
-                # loss_label = labelm_npy[~np.isnan(labelm_npy)]
-
-                # mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
-                # print(n_prof," obs ",lakename+" rmse=" + str(mat_rmse))
-                # avg_over_seed[seed_ct] = mat_rmse
-    # 
-                # row_vals = [lakename, n_prof, seed, mat_rmse]
-                # row_vals_str = [str(i) for i in row_vals]
-
-                #append
-                # csv_targ.append(",".join(row_vals_str))
-            avg_mse = avg_mse / mse_ct
-            print("test val mse: ",avg_mse)
-            if avg_mse < min_train_rmse:
-                min_train_rmse = avg_mse
-                print("model saved")
-                save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final"
-                saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
-                ep_since_min = 0
-                min_mse_tsterr = avg_mse
-                ep_min_mse = epoch
-            else:
-                ep_since_min += 1
-            print("lowest epoch was ",ep_min_mse," w/ mse=",min_mse_tsterr)
-            if ep_since_min == patience:
-                print("training complete")
-                sys.exit()
 
 
 print("training complete")
