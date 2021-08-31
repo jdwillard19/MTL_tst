@@ -238,7 +238,7 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
     # print(len(lakes_early_obs))
     return (X_trn_comp, trn_dates_comp)
 
-def formatResultsObsDayOnly(pred, targets, tst_dates,depths):
+def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     base_path = "../../data/raw/sb_mtl_data_release/"
     obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
     metadata = pd.read_feather("../../metadata/lake_metadata.feather")
