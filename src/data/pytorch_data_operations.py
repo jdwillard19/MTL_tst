@@ -247,11 +247,20 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     site_obs = obs_df[obs_df['site_id']=='nhdhr_'+target_id]
     preds_arr = []
     max_depth = np.unique(depths)[-1]
-    pdb.set_trace()
+    loss_pred = pred[np.isfinite(targets)]
+    loss_targets = targets[np.isfinite(targets)]
+    loss_dates = tst_dates[np.isfinite(targets)]
+    loss_depths = depths[np.isfinite(targets)]
     df = pd.DataFrame()
-    df['site_id'] = []
-    df['pred'] = []
-    df['actual'] = []
+    df['pred'] = loss_pred
+    df['actual'] = loss_targets
+    df['date'] = loss_dates
+    df['depth'] = loss_depths
+    df['site_id'] = 'nhdhr_'+target_id
+    pdb.set_trace()
+    df = df1.drop_duplicates(
+      subset = ['date', 'depth'],
+      keep = 'last').reset_index(drop = True)
     # for index,row in site_obs.iterrows():
     #     date = pd.Timestamp(row['date'])
     #     depth = row['depth']
