@@ -257,20 +257,10 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     df['date'] = loss_dates
     df['depth'] = loss_depths
     df['site_id'] = 'nhdhr_'+target_id
-    pdb.set_trace()
     df = df.drop_duplicates(
       subset = ['date', 'depth'],
       keep = 'last').reset_index(drop = True)
-    # for index,row in site_obs.iterrows():
-    #     date = pd.Timestamp(row['date'])
-    #     depth = row['depth']
-    #     if depth > max_depth:
-    #         continue
-    #     obs_pred = pred[np.where((tst_dates==date)&(depths==depth))][0]
-    #     obs_targ = targets[np.where((tst_dates==date)&(depths==depth))][0]
-    #     df2 = {'site_id':'nhdhr_'+target_id,'pred': obs_pred, 'actual': obs_targ}
-    #     df = df.append(df2, ignore_index = True)
-    # print("func end")
+
     return df
 
 def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features, \
