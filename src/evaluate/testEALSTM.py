@@ -49,8 +49,7 @@ verbose = True
 save = True
 test = True
 site_id = sys.argv[1]
-site_id_short = re.search('nhdhr_(.*)', site_id).group(1)
-test_lakes = [site_id_short]
+test_lakes = [site_id]
 print("n test lakes: ",len(test_lakes))
 #####################3
 #params
@@ -413,7 +412,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     observed = False
 
-    # pdb.set_trace()
     lake_arr = [target_id]
     win_shift = 350
 
