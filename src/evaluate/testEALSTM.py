@@ -457,7 +457,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             #calculate error
             targets = targets.cpu()
-            loss_indices = np.array(np.isfinite(targets.cpu()), dtype='bool_')
+            loss_indices = torch.from_numpy(np.array(np.isfinite(targets.cpu()), dtype='bool_'))
+            # loss_indices = np.array(np.isfinite(targets.cpu()), dtype='bool_')
             if use_gpu:
                 targets = targets.cuda()
             inputs = inputs[:, begin_loss_ind:, :]
