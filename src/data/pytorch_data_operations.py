@@ -259,7 +259,6 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
         obs_pred = pred[np.where((tst_dates==date)&(depths==depth))][0]
         df2 = {'site_id':'nhdhr_'+target_id,'pred': obs_pred, 'actual': row['temp']}
         df = df.append(df2, ignore_index = True)
-    pdb.set_trace()
     return df
 
 def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features, \
