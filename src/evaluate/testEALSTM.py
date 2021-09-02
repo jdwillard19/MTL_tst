@@ -482,3 +482,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         df = formatResultsObsDayOnly(target_id,pred.cpu().numpy(), targets.cpu().numpy(), tst_dates,depths) 
         rmse_per_lake[targ_ct] = rmse(df['actual'].values,df['pred'].values)
         
+print("median rmse")
+print(np.median(rmse_per_lake))
+pdb.set_trace()
