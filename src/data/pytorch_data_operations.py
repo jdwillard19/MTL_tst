@@ -242,9 +242,20 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     base_path = "../../data/raw/sb_mtl_data_release/"
     obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
     metadata = pd.read_feather("../../metadata/lake_metadata.feather")
-    depths = (depths * 3.27680686) + 5.43610635
+    depths = ((depths * 3.27680686) + 5.43610635).numpy()
+    site_obs = obs_df[obs_df['site_id']=='nhdhr_'+target_id]
+    preds_arr = []
+    for index,row in site_obs.iterrows():
+        date = pd.Timestamp(row['date'])
+        depth = row['depth']
+        preds_arr.append(pred[np.where((tst_dates==date)&(depths==depth))][0])
+
+    df = pd.Dataframe()
+    df['pred'] = preds_arr
+    df['actual'] = site_obs['temp']
+    df['site_id'] = site_obs['site_id']
     pdb.set_trace()
-    return 0
+    return df
 
 def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
