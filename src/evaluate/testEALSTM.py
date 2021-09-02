@@ -96,7 +96,7 @@ final_output_df = pd.DataFrame()
 
 
 
-def rmse(targ,pred)
+def rmse(targ,pred):
     return np.sqrt(((targ-pred)**2).mean())
 
 
