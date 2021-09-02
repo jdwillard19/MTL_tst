@@ -22,4 +22,6 @@ for site_id in test_lakes:
 	site_rmse = pd.read_csv("../../results/ealstm145_rmse_"+site_id+".csv")
 	obs_df = pd.concat([obs_df, site_obs], ignore_index=True)
 	rmse_df = pd.concat([rmse_df, site_rmse], ignore_index=True)
-	pdb.set_trace()
+
+obs_df.to_csv("../../results/all_outputs_and_obs_ea145.csv")
+rmse.to_csv("../../results/site_rmses_ea145.csv")
