@@ -478,7 +478,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         df2['site_id'] = ['nhdhr_'+target_id]
         df2['rmse'] = site_rmse
         df2.to_csv("../../results/ealstm145_rmse_"+target_id+".csv")
-        pdb.set_trace()
+
         print("rmse: ", site_rmse)
 
 
