@@ -3,7 +3,7 @@ import pandas as pd
 import pdb
 import os
 import sys
-
+import re
 
 glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv")
 train_lakes = [re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)]
