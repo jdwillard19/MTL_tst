@@ -240,11 +240,8 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
 
 def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     base_path = "../../data/raw/sb_mtl_data_release/"
-    obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
-    metadata = pd.read_feather("../../metadata/lake_metadata.feather")
     depths = ((depths * 3.27680686) + 5.43610635).numpy()
     depths = np.round(depths*2)/2
-    site_obs = obs_df[obs_df['site_id']=='nhdhr_'+target_id]
     preds_arr = []
     max_depth = np.unique(depths)[-1]
     df = pd.DataFrame()
@@ -254,10 +251,9 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     for index,row in site_obs.iterrows():
         date = pd.Timestamp(row['date'])
         depth = row['depth']
-        if depth > max_depth:
-            continue
         obs_pred = pred[np.where((tst_dates==date)&(depths==depth))][0]
-        df2 = {'site_id':'nhdhr_'+target_id,'pred': obs_pred, 'actual': row['temp']}
+        obs_targ = targets[np.where((tst_dates==date)&(depths==depth))][0]
+        df2 = {'site_id':'nhdhr_'+target_id,'pred': obs_pred, 'actual': obs_targ}
         df = df.append(df2, ignore_index = True)
     return df
 
