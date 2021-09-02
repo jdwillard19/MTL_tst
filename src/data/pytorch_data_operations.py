@@ -253,6 +253,8 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     for index,row in site_obs.iterrows():
         date = pd.Timestamp(row['date'])
         depth = row['depth']
+        if depth > max_depth:
+            continue
         obs_pred = pred[np.where((tst_dates==date)&(depths==depth))][0]
         obs_targ = targets[np.where((tst_dates==date)&(depths==depth))][0]
         df2 = {'site_id':'nhdhr_'+target_id,'pred': obs_pred, 'actual': obs_targ}
