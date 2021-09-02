@@ -18,8 +18,8 @@ test_lakes = ids[~np.isin(ids, train_lakes)]
 obs_df = pd.DataFrame()
 rmse_df = pd.DataFrame()
 for site_id in test_lakes:
-	site_obs = pd.read_csv("../../results/ealstm145_results_"+target_id+".csv")
-	site_rmse = pd.read_csv("../../results/ealstm145_rmse_"+target_id+".csv")
+	site_obs = pd.read_csv("../../results/ealstm145_results_"+site_id+".csv")
+	site_rmse = pd.read_csv("../../results/ealstm145_rmse_"+site_id+".csv")
 	obs_df = pd.concat([obs_df, site_obs], ignore_index=True)
 	rmse_df = pd.concat([rmse_df, site_rmse], ignore_index=True)
 	pdb.set_trace()
