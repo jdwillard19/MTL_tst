@@ -246,11 +246,13 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     depths = np.round(depths*2)/2
     site_obs = obs_df[obs_df['site_id']=='nhdhr_'+target_id]
     preds_arr = []
+    max_depth = np.unique(depths)[-1]
+
     for index,row in site_obs.iterrows():
         date = pd.Timestamp(row['date'])
         depth = row['depth']
-        if np.where((tst_dates==date)&(depths==depth))[0].shape[0] == 0:
-            pdb.set_trace()
+        if depth > max_depth:
+            continue
         preds_arr.append(pred[np.where((tst_dates==date)&(depths==depth))][0])
 
     df = pd.Dataframe()
