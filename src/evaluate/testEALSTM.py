@@ -429,7 +429,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     (tst_data, tst_dates) = buildCtlstmLakeData(lake_arr,\
                                         seq_length, n_features,\
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                        verbose=True) 
+                                        verbose=False) 
 
     # unique_tst_dates_target = np.unique(tst_dates)
     # assert unique_tst_dates_target.shape[0] == 14976, "test data incorrect size"
@@ -479,8 +479,11 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # if mse > 0: #obsolete i think
             #     ct += 1
         avg_mse = avg_mse / ct
-        df = formatResultsObsDayOnly(target_id,pred.cpu().numpy(), targets.cpu().numpy(), tst_dates,depths) 
-        rmse_per_lake[targ_ct] = rmse(df['actual'].values,df['pred'].values)
+        df = formatResultsObsDayOnly(target_id,pred.cpu().numpy(), targets.cpu().numpy(), tst_dates,depths)
+        site_rmse =  rmse(df['actual'].values,df['pred'].values) 
+        rmse_per_lake[targ_ct] = site_rmse
+        print("rmse: ", site_rmse)
+
         
 print("median rmse")
 print(np.median(rmse_per_lake))
