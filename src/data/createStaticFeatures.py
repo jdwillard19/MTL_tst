@@ -19,7 +19,6 @@ import datetime
 #Features to add
 # max depth
 # log surface area
-# elevation?
 # latitude
 # longitude
 # GLM strat perc
@@ -48,7 +47,8 @@ feat_per_lake[:] = np.nan
 #calculate averages and std_dev for each input driver across all lakes
 for lake_ind, name in enumerate(ids):
     nid = 'nhdhr_' + name
-
+    if metadata_s[metadata_s['site_id']==nid].elevation_m.values.shape[0] == 0:
+        pdb.set_trace()
     print("(",lake_ind,"/",str(len(ids)),") ","pre ", name)
     feat_per_lake[lake_ind,0] = metadata.loc[name].max_depth
     feat_per_lake[lake_ind,1] = np.log(metadata.loc[name].surface_area)
