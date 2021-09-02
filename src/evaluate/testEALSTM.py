@@ -49,7 +49,8 @@ verbose = True
 save = True
 test = True
 site_id = sys.argv[1]
-test_lakes = [site_id]
+site_id_short = re.search('nhdhr_(.*)', site_id).group(1)
+test_lakes = [site_id_short]
 print("n test lakes: ",len(test_lakes))
 #####################3
 #params
@@ -415,6 +416,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     # pdb.set_trace()
     lake_arr = [target_id]
     win_shift = 350
+
     (tst_data, tst_dates) = buildCtlstmLakeData(lake_arr,\
                                         seq_length, n_features,\
                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
