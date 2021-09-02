@@ -247,18 +247,18 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     site_obs = obs_df[obs_df['site_id']=='nhdhr_'+target_id]
     preds_arr = []
     max_depth = np.unique(depths)[-1]
-
+    df = pd.DataFrame()
+    df['site_id'] = []
+    df['pred'] = []
+    df['actual'] = []
     for index,row in site_obs.iterrows():
         date = pd.Timestamp(row['date'])
         depth = row['depth']
         if depth > max_depth:
             continue
-        preds_arr.append(pred[np.where((tst_dates==date)&(depths==depth))][0])
-
-    df = pd.DataFrame()
-    df['pred'] = preds_arr
-    df['actual'] = site_obs['temp']
-    df['site_id'] = site_obs['site_id']
+        obs_pred = pred[np.where((tst_dates==date)&(depths==depth))][0]
+        df2 = {'site_id':'nhdhr_'+target_id,'pred': obs_pred, 'actual': row['temp']}
+        df = df.append(df2, ignore_index = True)
     pdb.set_trace()
     return df
 
