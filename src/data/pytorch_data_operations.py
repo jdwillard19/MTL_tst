@@ -260,7 +260,6 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
         df2 = {'site_id':'nhdhr_'+target_id,'pred': obs_pred, 'actual': obs_targ}
         df = df.append(df2, ignore_index = True)
     return df
-    return df
 
 def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
