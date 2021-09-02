@@ -255,7 +255,7 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
             continue
         preds_arr.append(pred[np.where((tst_dates==date)&(depths==depth))][0])
 
-    df = pd.Dataframe()
+    df = pd.DataFrame()
     df['pred'] = preds_arr
     df['actual'] = site_obs['temp']
     df['site_id'] = site_obs['site_id']
