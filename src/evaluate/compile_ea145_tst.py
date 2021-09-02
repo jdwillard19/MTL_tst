@@ -24,4 +24,4 @@ for site_id in test_lakes:
 	rmse_df = pd.concat([rmse_df, site_rmse], ignore_index=True)
 
 obs_df.to_csv("../../results/all_outputs_and_obs_ea145.csv")
-rmse.to_csv("../../results/site_rmses_ea145.csv")
+rmse_df.to_csv("../../results/site_rmses_ea145.csv")
