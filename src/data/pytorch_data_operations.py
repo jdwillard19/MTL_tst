@@ -243,13 +243,12 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
     metadata = pd.read_feather("../../metadata/lake_metadata.feather")
     depths = ((depths * 3.27680686) + 5.43610635).numpy()
+    depths = np.round(depths*2)/2
     site_obs = obs_df[obs_df['site_id']=='nhdhr_'+target_id]
     preds_arr = []
     for index,row in site_obs.iterrows():
         date = pd.Timestamp(row['date'])
         depth = row['depth']
-        if np.where((tst_dates==date)&(depths==depth))[0].shape[0] == 0:
-            pdb.set_trace()
         preds_arr.append(pred[np.where((tst_dates==date)&(depths==depth))][0])
 
     df = pd.Dataframe()
