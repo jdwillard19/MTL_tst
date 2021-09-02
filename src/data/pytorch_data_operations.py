@@ -258,7 +258,7 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     df['depth'] = loss_depths
     df['site_id'] = 'nhdhr_'+target_id
     pdb.set_trace()
-    df = df1.drop_duplicates(
+    df = df.drop_duplicates(
       subset = ['date', 'depth'],
       keep = 'last').reset_index(drop = True)
     # for index,row in site_obs.iterrows():
