@@ -457,11 +457,10 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             #calculate error
             targets = targets.cpu()
-            loss_indices = np.array(np.isfinite(targets.cpu()), dtype='bool_')
+            loss_indices = torch.from_numpy(np.array(np.isfinite(targets.cpu()), dtype='bool_'))
             if use_gpu:
                 targets = targets.cuda()
             inputs = inputs[:, begin_loss_ind:, :]
-            pdb.set_trace()
             mse = mse_criterion(pred[loss_indices], targets[loss_indices])
             # print("test loss = ",mse)
             avg_mse += mse
