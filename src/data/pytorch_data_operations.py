@@ -248,6 +248,8 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     for index,row in site_obs.iterrows():
         date = pd.Timestamp(row['date'])
         depth = row['depth']
+        if np.where((tst_dates==date)&(depths==depth))[0].shape[0] == 0:
+            pdb.set_trace()
         preds_arr.append(pred[np.where((tst_dates==date)&(depths==depth))][0])
 
     df = pd.Dataframe()
