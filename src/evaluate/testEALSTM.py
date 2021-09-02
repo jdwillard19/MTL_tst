@@ -403,7 +403,7 @@ lstm_net.load_state_dict(pretrain_dict)
 
 manualSeed = [random.randint(1, 99999999) for i in range(n_eps)]
 rmse_per_lake = np.empty((len(test_lakes)))
-rmse_per_lake = np.nan
+rmse_per_lake[:] = np.nan
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     print(str(targ_ct),'/',len(test_lakes),':',target_id)
     # if pd.read_feather('../../results/SWT_results/outputs_'+target_id+'.feather').shape[0] == 14976:
