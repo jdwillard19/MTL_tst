@@ -96,7 +96,8 @@ final_output_df = pd.DataFrame()
 
 
 
-
+def rmse(targ,pred)
+    return np.sqrt(((targ-pred)**2).mean())
 
 
 #define EA-LSTM class
@@ -401,7 +402,8 @@ lstm_net.load_state_dict(pretrain_dict)
 #training loop
 
 manualSeed = [random.randint(1, 99999999) for i in range(n_eps)]
-
+rmse_per_lake = np.empty((len(test_lakes)))
+rmse_per_lake = np.nan
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     print(str(targ_ct),'/',len(test_lakes),':',target_id)
     # if pd.read_feather('../../results/SWT_results/outputs_'+target_id+'.feather').shape[0] == 14976:
@@ -477,7 +479,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # if mse > 0: #obsolete i think
             #     ct += 1
         avg_mse = avg_mse / ct
-        print("MSE: ",avg_mse)
         df = formatResultsObsDayOnly(target_id,pred.cpu().numpy(), targets.cpu().numpy(), tst_dates,depths) 
-
+        rmse_per_lake[targ_ct] = rmse(df['actual'].values,df['pred'].values)
         
