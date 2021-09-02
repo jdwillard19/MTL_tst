@@ -48,12 +48,8 @@ torch.set_printoptions(precision=10)
 verbose = True
 save = True
 test = True
-
-glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv")
-train_lakes = [re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)]
-ids = pd.read_csv('../../metadata/pball_site_ids.csv', header=None)
-ids = ids[0].values
-test_lakes = ids[~np.isin(ids, train_lakes)]
+site_id = sys.argv[1]
+test_lakes = [site_id]
 print("n test lakes: ",len(test_lakes))
 #####################3
 #params
@@ -73,13 +69,6 @@ n_hidden = 256
 
 #epoch settings
 n_eps = 70
-
-#load metadata
-# metadata = pd.read_csv("../../metadata/lake_metadata.csv")
-metadata = pd.read_feather("../../metadata/lake_metadata.feather")
-
-#trim to observed lakes
-# metadata = metadata[metadata['num_obs'] > 0]
 
 
 first_save_epoch = 0
@@ -482,9 +471,12 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         df = formatResultsObsDayOnly(target_id,pred.cpu().numpy(), targets.cpu().numpy(), tst_dates,depths)
         site_rmse =  rmse(df['actual'].values,df['pred'].values) 
         rmse_per_lake[targ_ct] = site_rmse
+        df.to_csv("../../results/ealstm145_results_"+target_id+".csv")
+        df2 = pd.DataFrame()
+        df2['site_id'] = ['nhdhr_'+target_id]
+        df2['rmse'] = site_rmse
+        df2.to_csv("../../results/ealstm145_rmse_"+target_id+".csv")
+        pdb.set_trace()
         print("rmse: ", site_rmse)
 
-        
-print("median rmse")
-print(np.median(rmse_per_lake))
-pdb.set_trace()
+
