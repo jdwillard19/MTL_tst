@@ -202,6 +202,8 @@ class SaugLSTM(nn.Module):
     def __init__(self, input_size_dyn, input_size_static, hidden_size, batch_size):
         super(SaugLSTM, self).__init__()
         self.input_size = input_size_dyn+input_size_static
+        self.input_size_dyn = input_size_dyn
+        self.input_size_static = input_size_static
         self.hidden_size = hidden_size
         self.batch_size = batch_size
         self.fc1 = nn.Linear(input_size_static, input_size_static)
@@ -325,7 +327,7 @@ for epoch in range(n_eps):
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
-        reg1_loss = 0
+        reg1_loss = 0x
         if lambda1 > 0:
             reg1_loss = calculate_l1_loss(lstm_net)
 
