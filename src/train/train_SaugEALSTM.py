@@ -322,7 +322,7 @@ for epoch in range(n_eps):
         lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
         # lstm_net.reset_parameters()
         h_state = None
-        outputs, h_state, _ = lstm_net(inputs,h_state)
+        outputs, h_state = lstm_net(inputs,h_state)
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
