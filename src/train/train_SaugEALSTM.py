@@ -327,7 +327,7 @@ for epoch in range(n_eps):
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
-        reg1_loss = 0x
+        reg1_loss = 0
         if lambda1 > 0:
             reg1_loss = calculate_l1_loss(lstm_net)
 
