@@ -201,7 +201,7 @@ see <https://opensource.org/licenses/Apache-2.0>
 class SaugLSTM(nn.Module):
     def __init__(self, input_size_dyn, input_size_static, hidden_size, batch_size):
         super(SaugLSTM, self).__init__()
-        self.input_size = input_size
+        self.input_size = input_size_dyn+input_size_static
         self.hidden_size = hidden_size
         self.batch_size = batch_size
         self.fc1 = nn.Linear(input_size_static, input_size_static)
