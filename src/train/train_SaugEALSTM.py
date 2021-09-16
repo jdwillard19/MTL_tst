@@ -252,7 +252,7 @@ def calculate_l1_loss(model):
 
 
 # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-lstm_net = myLSTM_Net(input_size_dyn=n_features-n_static_feats,input_size_static= n_static_feats,hidden_size=n_hidden,batch_size=batch_size)
+lstm_net = SaugLSTM(input_size_dyn=n_features-n_static_feats,input_size_static= n_static_feats,hidden_size=n_hidden,batch_size=batch_size)
 
 #tell model to use GPU if needed
 if use_gpu:
