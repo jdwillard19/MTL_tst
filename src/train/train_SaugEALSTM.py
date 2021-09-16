@@ -59,7 +59,6 @@ seq_length = 350 #how long of sequences to use in model
 begin_loss_ind = 0#index in sequence where we begin to calculate error or predict
 n_features = 15  #number of physical drivers
 n_static_feats = 7
-n_total_feats =n_static_feats+n_features
 win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
@@ -207,7 +206,7 @@ class SaugLSTM(nn.Module):
         self.hidden_size = hidden_size
         self.batch_size = batch_size
         self.fc1 = nn.Linear(input_size_static, input_size_static)
-        self.lstm = nn.LSTM(input_size = n_total_feats, hidden_size=hidden_size, batch_first=True,num_layers=num_layers,dropout=dropout) #batch_first=True?
+        self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers,dropout=dropout) #batch_first=True?
         self.out = nn.Linear(hidden_size, 1) #1?
         self.hidden = self.init_hidden()
 
@@ -253,7 +252,7 @@ def calculate_l1_loss(model):
 
 
 
-# lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
+# lstm_net = myLSTM_Net(, n_hidden, batch_size)
 lstm_net = SaugLSTM(input_size_dyn=n_features-n_static_feats,input_size_static= n_static_feats,hidden_size=n_hidden,batch_size=batch_size)
 
 #tell model to use GPU if needed
