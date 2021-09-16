@@ -197,7 +197,7 @@ see <https://opensource.org/licenses/Apache-2.0>
 #         self.hidden = hidden
 #         x = self.out(x)
 #         return x, hidden
-
+ff_hid = 30
 class SaugLSTM(nn.Module):
     def __init__(self, input_size_dyn, input_size_static, hidden_size, batch_size):
         super(SaugLSTM, self).__init__()
@@ -206,9 +206,9 @@ class SaugLSTM(nn.Module):
         self.input_size_static = input_size_static
         self.hidden_size = hidden_size
         self.batch_size = batch_size
-        self.fc1 = nn.Linear(input_size_static, input_size_static)
-        self.fc2 = nn.Linear(input_size_static, input_size_static)
-        self.fc3 = nn.Linear(input_size_static, input_size_static)
+        self.fc1 = nn.Linear(input_size_static, ff_hid)
+        self.fc2 = nn.Linear(ff_hid, ff_hid)
+        self.fc3a = nn.Linear(ff_hid, input_size_static)
 
         self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers,dropout=dropout) #batch_first=True?
         self.out = nn.Linear(hidden_size, 1) #1?
