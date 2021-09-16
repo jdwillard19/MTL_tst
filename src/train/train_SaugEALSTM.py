@@ -321,7 +321,7 @@ for epoch in range(n_eps):
         # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
         # lstm_net.reset_parameters()
         # h_state = None
-        outputs, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+        outputs, h_state, _ = lstm_net(inputs)
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
