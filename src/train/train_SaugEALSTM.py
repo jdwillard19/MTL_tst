@@ -225,7 +225,6 @@ class SaugLSTM(nn.Module):
 
     def forward(self, x, hidden):
         self.lstm.flatten_parameters()
-        pdb.set_trace()
         x = x.float()
         x[:,:,:self.input_size_static] = self.fc1(x[:,:,:self.input_size_static])
         x, hidden = self.lstm(x, self.hidden)
