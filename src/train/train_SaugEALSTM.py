@@ -15,6 +15,7 @@ import math
 import sys
 import re
 import os
+import torch.nn.functional as F
 sys.path.append('../../data')
 sys.path.append('../data')
 sys.path.append('../../models')
@@ -206,6 +207,9 @@ class SaugLSTM(nn.Module):
         self.hidden_size = hidden_size
         self.batch_size = batch_size
         self.fc1 = nn.Linear(input_size_static, input_size_static)
+        self.fc2 = nn.Linear(input_size_static, input_size_static)
+        self.fc3 = nn.Linear(input_size_static, input_size_static)
+
         self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers,dropout=dropout) #batch_first=True?
         self.out = nn.Linear(hidden_size, 1) #1?
         self.hidden = self.init_hidden()
@@ -225,7 +229,11 @@ class SaugLSTM(nn.Module):
     def forward(self, x, hidden):
         self.lstm.flatten_parameters()
         x = x.float()
-        x[:,:,:self.input_size_static] = self.fc1(x[:,:,:self.input_size_static])
+        x_stat = x[:,:,:self.input_size_static]
+        x_stat = F.relu(self.fc1(x_stat))
+        x_stat = F.relu(self.fc2(x_stat))
+        x_stat = F.relu(self.fc3(x_stat))
+        x[:,:,:self.input_size_static] = x_stat
         x, hidden = self.lstm(x, self.hidden)
         self.hidden = hidden
         x = self.out(x)
