@@ -87,7 +87,6 @@ yhat_batch_size = 1 #obsolete since this isnt PGDL
 final_output_df = pd.DataFrame()
 
 
-lakenames = np.load("")
 tst_inds = [1, 11, 21, 31, 41]
 tst_lakes = np.array([lakenames[i] for i in tst_inds])
 trn_lakes = np.delete(lakenames,tst_inds)
