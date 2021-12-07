@@ -370,8 +370,7 @@ class Model(nn.Module):
 
         if self.concat_static or self.no_static:
             self.lstm = LSTM(input_size=input_size_dyn,
-                             hidden_size=hidden_size,
-                             initial_forget_bias=initial_forget_bias)
+                             hidden_size=hidden_size)
         else:
             self.lstm = EALSTM(input_size_dyn=input_size_dyn,
                                input_size_stat=input_size_stat,
@@ -426,7 +425,7 @@ class Model(nn.Module):
 
 
 
-lstm_net = Model(input_size_dyn=n_features,input_size_stat=0,hidden_size=n_hidden, no_static=True)
+lstm_net = Model(input_size_dyn=n_features,input_size_stat=0,hidden_size=n_hidden, no_static=True,batch_size=batch_size)
 
 #tell model to use GPU if needed
 if use_gpu:
