@@ -113,7 +113,7 @@ else:
 
 
 print("train_data size: ",trn_data.size())
-print("val_data size: ",trn_data.size())
+print("val_data size: ",val_data.size())
 
 
 
