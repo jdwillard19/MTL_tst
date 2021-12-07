@@ -402,7 +402,8 @@ class Model(nn.Module):
             Tensor containing the cell states of each time step
         """
         if self.concat_static or self.no_static:
-            h_n, c_n = self.lstm(x_d)
+            h_n = None
+            h_n, c_n = self.lstm(x_d, h_n)
         else:
             h_n, c_n = self.lstm(x_d, x_s)
         h_n = self.dropout(h_n)
@@ -488,8 +489,8 @@ for epoch in range(n_eps):
         #forward  prop
         # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
         # lstm_net.reset_parameters()
-        # h_state = None
-        outputs, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+        h_state = None
+        outputs, h_state = lstm_net(inputs, h_state)
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
