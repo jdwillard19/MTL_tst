@@ -122,7 +122,8 @@ print("val_data size: ",val_data.size())
 
 
 
-batch_size = 1600
+batch_size = 256
+ff_hid = 64
 
 
 
