@@ -49,8 +49,7 @@ verbose = True
 save = True
 test = True
 
-glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv")
-lakenames = [re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)]
+lakenames = np.load("lakeList.npy",allow_pickle=True)
 
 #####################3
 #params
