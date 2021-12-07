@@ -296,7 +296,7 @@ for epoch in range(n_eps):
         loss = mse_criterion(loss_outputs[loss_indices], loss_targets[loss_indices]) + lambda1*reg1_loss 
         #backward
 
-        loss.backward(retain_graph=False)
+        loss.backward()
         if grad_clip > 0:
             clip_grad_norm_(lstm_net.parameters(), grad_clip, norm_type=2)
 
