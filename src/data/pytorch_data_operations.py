@@ -17,7 +17,7 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
                         win_shift=1, begin_loss_ind=100,\
                         test_seq_per_depth=1, sparseCustom=None,
                         allTestSeq=False,verbose=False,postProcessSplits=True, \
-                        randomSeed=0):
+                        randomSeed=0, two_thirds_train=True):
     #composite data structures
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
     trn_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
@@ -51,13 +51,14 @@ def buildCtlstmLakeData(lakenames, seq_length, n_features,\
         # #alternative way to divide test/train just by 1/3rd 2/3rd
         # tst = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/test.npy"))
         # trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/train.npy"))
-        if os.path.exists(os.path.join(my_path, "../../data/processed/"+lakename+"/full.npy")):
-            full = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/full.npy"))
+        trn = []
+        if two_thirds_train:
+            if os.path.exists(os.path.join(my_path, "../../data/processed/"+lakename+"/full.npy")):
+                trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/full.npy"))
+            else:
+                trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/full_obs.npy"))
         else:
-            full = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/full_obs.npy"))
-
-
-        trn = full
+            trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/trn.npy"))
         # if debug:
         #     print("initial trn: ", trn)
         #     print("observations: ",np.count_nonzero(~np.isnan(trn)))
@@ -250,7 +251,6 @@ def formatResultsObsDayOnly(target_id,pred, targets, tst_dates,depths):
     loss_pred = pred[np.isfinite(targets)]
     loss_targets = targets[np.isfinite(targets)]
     loss_dates = tst_dates[np.isfinite(targets)]
-    loss_depths = depths[np.isfinite(targets)]
     df = pd.DataFrame()
     df['pred'] = loss_pred
     df['actual'] = loss_targets
