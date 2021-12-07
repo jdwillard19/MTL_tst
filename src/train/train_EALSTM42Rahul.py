@@ -164,7 +164,7 @@ see <https://opensource.org/licenses/Apache-2.0>
 #define LSTM model class
 class LSTM(nn.Module):
     def __init__(self, input_size, hidden_size, batch_size):
-        super(myLSTM_Net, self).__init__()
+        super(LSTM, self).__init__()
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.batch_size = batch_size
