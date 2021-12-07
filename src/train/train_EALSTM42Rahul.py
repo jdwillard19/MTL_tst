@@ -111,7 +111,7 @@ if not os.path.exists("./ealstm_val_data42.npy"):
 else:
     val_data = torch.from_numpy(np.load("./ealstm_val_data42.npy"))
 
-
+print("n features: ", trn_data.size()[0]-1)
 print("train_data size: ",trn_data.size())
 print("val_data size: ",val_data.size())
 
