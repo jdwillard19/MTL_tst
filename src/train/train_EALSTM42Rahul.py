@@ -340,7 +340,8 @@ class Model(nn.Module):
                  initial_forget_bias: int = 5,
                  dropout: float = 0.0,
                  concat_static: bool = False,
-                 no_static: bool = False):
+                 no_static: bool = False,
+                 batch_size: int = 10):
         """Initialize model.
         Parameters
         ----------
@@ -367,10 +368,12 @@ class Model(nn.Module):
         self.dropout_rate = dropout
         self.concat_static = concat_static
         self.no_static = no_static
+        self.batch_size = batch_size
 
         if self.concat_static or self.no_static:
             self.lstm = LSTM(input_size=input_size_dyn,
-                             hidden_size=hidden_size)
+                             hidden_size=hidden_size,
+                             batch_size=batch_size)
         else:
             self.lstm = EALSTM(input_size_dyn=input_size_dyn,
                                input_size_stat=input_size_stat,
