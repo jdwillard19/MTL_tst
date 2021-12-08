@@ -116,7 +116,7 @@ print("val_data size: ",val_data.size())
 
 
 
-batch_size = 4000
+batch_size = 2000
 
 
 
