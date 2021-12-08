@@ -116,7 +116,7 @@ print("val_data size: ",val_data.size())
 
 
 
-batch_size = 100
+batch_size = 4000
 
 
 
@@ -334,8 +334,8 @@ for epoch in range(n_eps):
 
             #run model predict
             h_state = None
-            # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
-            pred, h_state, _ = lstm_net(inputs)
+            lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+            pred, h_state, _ = lstm_net(inputs,h_state)
 
             pred = pred.view(pred.size()[0],-1)
             pred = pred[:, begin_loss_ind:]
