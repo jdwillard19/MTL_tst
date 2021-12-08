@@ -253,7 +253,6 @@ for epoch in range(n_eps):
     batches_done = 0
     ct = 0
     for m, data in enumerate(trainloader, 0):
-        print("batch")
         #now for mendota data
         #this loop is dated, there is now only one item in testloader
 
@@ -296,7 +295,7 @@ for epoch in range(n_eps):
         loss = mse_criterion(loss_outputs[loss_indices], loss_targets[loss_indices]) + lambda1*reg1_loss 
         #backward
 
-        loss.backward()
+        loss.backward(retain_graph=True)
         if grad_clip > 0:
             clip_grad_norm_(lstm_net.parameters(), grad_clip, norm_type=2)
 
