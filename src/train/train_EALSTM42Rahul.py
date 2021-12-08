@@ -335,7 +335,7 @@ for epoch in range(n_eps):
             #run model predict
             h_state = None
             lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
-            pred, h_state, _ = lstm_net(inputs,h_state)
+            pred, h_state = lstm_net(inputs,h_state)
 
             pred = pred.view(pred.size()[0],-1)
             pred = pred[:, begin_loss_ind:]
