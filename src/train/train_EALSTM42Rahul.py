@@ -248,12 +248,12 @@ for epoch in range(n_eps):
 
 
     #zero the parameter gradients
-    optimizer.zero_grad()
     lstm_net.train(True)
     avg_loss = 0
     batches_done = 0
     ct = 0
     for m, data in enumerate(trainloader, 0):
+        print("batch")
         #now for mendota data
         #this loop is dated, there is now only one item in testloader
 
